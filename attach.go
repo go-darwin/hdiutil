@@ -39,42 +39,42 @@ func (a attachRWType) attachFlag() string {
 
 type attachKernel bool
 
-func (a attachKernel) attachFlag() []string { return boolNoFlag(bool(a), "kernel") }
+func (a attachKernel) attachFlag() []string { return boolNoFlag("kernel", bool(a)) }
 
 type attachNotRemovable bool
 
-func (a attachNotRemovable) attachFlag() []string { return boolFlag(bool(a), "notremovable") }
+func (a attachNotRemovable) attachFlag() []string { return boolFlag("notremovable", bool(a)) }
 
 type attachMount string
 
-func (a attachMount) attachFlag() []string { return stringFlag(string(a), "mount") }
+func (a attachMount) attachFlag() []string { return stringFlag("mount", string(a)) }
 
 type attachNoMount bool
 
-func (a attachNoMount) attachFlag() []string { return boolFlag(bool(a), "nomount") }
+func (a attachNoMount) attachFlag() []string { return boolFlag("nomount", bool(a)) }
 
 // AttachMountRoot mount volumes on subdirectories of path instead of under /Volumes. path must exist.
 //
 // Full mount point paths must be less than MNAMELEN characters (increased from 90 to 1024 in Mac OS X 10.6).
 type AttachMountRoot string
 
-func (a AttachMountRoot) attachFlag() []string { return stringFlag(string(a), "mountroot") }
+func (a AttachMountRoot) attachFlag() []string { return stringFlag("mountroot", string(a)) }
 
 // AttachMountRandom like -mountroot, but mount point directory names are randomized with mkdtemp(3).
 type AttachMountRandom string
 
-func (a AttachMountRandom) attachFlag() []string { return stringFlag(string(a), "mountrandom") }
+func (a AttachMountRandom) attachFlag() []string { return stringFlag("mountrandom", string(a)) }
 
 // AttachMountPoint assuming only one volume, mount it at path instead of in /Volumes.
 //
 // See fstab(5) for ways a system administrator can make particular volumes automatically mount in particular filesystem locations by editing the file /etc/fstab.
 type AttachMountPoint string
 
-func (a AttachMountPoint) attachFlag() []string { return stringFlag(string(a), "mountpoint") }
+func (a AttachMountPoint) attachFlag() []string { return stringFlag("mountpoint", string(a)) }
 
 type attachNoBrowse bool
 
-func (a attachNoBrowse) attachFlag() []string { return boolFlag(bool(a), "nobrowse") }
+func (a attachNoBrowse) attachFlag() []string { return boolFlag("nobrowse", bool(a)) }
 
 type attachOwners string
 
@@ -83,7 +83,7 @@ const (
 	ownersOff attachOwners = "off"
 )
 
-func (a attachOwners) attachFlag() []string { return stringFlag(string(a), "owners") }
+func (a attachOwners) attachFlag() []string { return stringFlag("owners", string(a)) }
 
 // AttachDrivekey specify a key/value pair to be set on the device in the IOKit registry.
 type AttachDrivekey [2]string
@@ -107,41 +107,41 @@ func (a AttachSection) attachFlag() []string {
 
 type attachVerify bool
 
-func (a attachVerify) attachFlag() []string { return boolNoFlag(bool(a), "verify") }
+func (a attachVerify) attachFlag() []string { return boolNoFlag("verify", bool(a)) }
 
 type attachIgnoreBadChecksums bool
 
 func (a attachIgnoreBadChecksums) attachFlag() []string {
-	return boolNoFlag(bool(a), "ignoreBadChecksums")
+	return boolNoFlag("ignoreBadChecksums", bool(a))
 }
 
 type attachIdme bool
 
-func (a attachIdme) attachFlag() []string { return boolNoFlag(bool(a), "idme") }
+func (a attachIdme) attachFlag() []string { return boolNoFlag("idme", bool(a)) }
 
 type atachIdmeReveal bool
 
-func (a atachIdmeReveal) attachFlag() []string { return boolNoFlag(bool(a), "idmereveal") }
+func (a atachIdmeReveal) attachFlag() []string { return boolNoFlag("idmereveal", bool(a)) }
 
 type attachIdmeTrash bool
 
-func (a attachIdmeTrash) attachFlag() []string { return boolNoFlag(bool(a), "idmetrash") }
+func (a attachIdmeTrash) attachFlag() []string { return boolNoFlag("idmetrash", bool(a)) }
 
 type attachAutoOpen bool
 
-func (a attachAutoOpen) attachFlag() []string { return boolNoFlag(bool(a), "autoopen") }
+func (a attachAutoOpen) attachFlag() []string { return boolNoFlag("autoopen", bool(a)) }
 
 type attachAutoOpenRO bool
 
-func (a attachAutoOpenRO) attachFlag() []string { return boolNoFlag(bool(a), "autoopenro") }
+func (a attachAutoOpenRO) attachFlag() []string { return boolNoFlag("autoopenro", bool(a)) }
 
 type attachAutoOpenRW bool
 
-func (a attachAutoOpenRW) attachFlag() []string { return boolNoFlag(bool(a), "autoopenrw") }
+func (a attachAutoOpenRW) attachFlag() []string { return boolNoFlag("autoopenrw", bool(a)) }
 
 type attachAutoFsck bool
 
-func (a attachAutoFsck) attachFlag() []string { return boolNoFlag(bool(a), "autofsck") }
+func (a attachAutoFsck) attachFlag() []string { return boolNoFlag("autofsck", bool(a)) }
 
 const (
 	// AttachReadonly force the resulting device to be read-only.

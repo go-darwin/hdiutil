@@ -13,7 +13,7 @@ type verifyFlag interface {
 
 type verifyCache bool
 
-func (v verifyCache) verifyFlag() []string { return boolFlag(bool(v), "cache") }
+func (v verifyCache) verifyFlag() []string { return boolFlag("cache", bool(v)) }
 
 const (
 	// VerifyCache do cache checksum-verification.

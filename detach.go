@@ -13,7 +13,7 @@ type detachFlag interface {
 
 type detachForce bool
 
-func (d detachForce) detachFlag() []string { return boolFlag(bool(d), "force") }
+func (d detachForce) detachFlag() []string { return boolFlag("force", bool(d)) }
 
 const (
 	// DetachForce ignore open files on mounted volumes, etc.
