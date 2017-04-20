@@ -48,23 +48,15 @@ func (e EncryptionType) String() string {
 	return fmt.Sprintf("EncryptionType(%d)", e)
 }
 
-func (e EncryptionType) attachFlag() string { return e.String() }
+func (e EncryptionType) attachFlag() []string { return stringFlag(e.String(), "encryption") }
 
-// Plist provide result output in plist format.
-// Other programs invoking hdiutil are expected to use -plist rather than try to parse the human-readable output.
-//
-// The usual output is consistent but generally unstructured.
-type Plist bool
+type plist bool
 
-func (p Plist) attachFlag() []string { return boolFlag(bool(p), "plist") }
+func (p plist) attachFlag() []string { return boolFlag(bool(p), "plist") }
 
-// Puppetstrings provide progress output that is easy for another program to parse.
-// PERCENTAGE outputs can include the value -1 which means hdiutil is performing an operation that will take an indeterminate amount of time to complete.
-//
-// Any program trying to interpret hdiutil's progress should use -puppetstrings.
-type Puppetstrings bool
+type puppetstrings bool
 
-func (p Puppetstrings) attachFlag() []string { return boolFlag(bool(p), "puppetstrings") }
+func (p puppetstrings) attachFlag() []string { return boolFlag(bool(p), "puppetstrings") }
 
 // Srcimagekey specify a key/value pair for the disk image recognition system. (-imagekey is normally a synonym)
 type Srcimagekey map[string]string
@@ -77,20 +69,11 @@ type Tgtimagekey map[string]string
 // As of OS X 10.7, the default algorithm is the AES cipher running in CBC mode on 512-byte blocks with a 128-bit key.
 type Encryption EncryptionType
 
-// Stdinpass read a null-terminated passphrase from standard input.
-// If the standard input is a tty, the passphrase will be read with readpassphrase(3).
-// Otherwise, the password is read from stdin.
-//
-// -stdinpass replaces -passphrase which has been deprecated.
-// -passphrase is insecure because its argument appears in the output of ps(1) where it is visible to other users and processes on the system.
-type Stdinpass bool
+type stdinpass bool
 
-func (s Stdinpass) attachFlag() []string { return boolFlag(bool(s), "stdinpass") }
+func (s stdinpass) attachFlag() []string { return boolFlag(bool(s), "stdinpass") }
 
-// Agentpass force the default behavior of prompting for a passphrase.
-//
-// Useful with -pubkey to create an image protected by both a passphrase and a public key.
-type Agentpass bool
+type agentpass bool
 
 // Recover specify a keychain containing the secret corresponding to the certificate specified with -certificate when the image was created.
 type Recover string
@@ -110,9 +93,7 @@ type Pubkey []string
 // See also --capath and --cacert in curl(1).
 type Cacert string
 
-// Insecurehttp ignore SSL host validation failures.
-// Useful for self-signed servers for which the appropriate certificates are unavailable or if access to a server is desired when the server name doesn't match what is in the certificate.
-type Insecurehttp bool
+type insecurehttp bool
 
 // Shadow use a shadow file in conjunction with the data in the primary image file.
 // This option prevents modification of the original image and allows read-only images to be attached read/write.
@@ -127,32 +108,69 @@ type Shadow string
 
 func (s Shadow) attachFlag() []string { return stringFlag(string(s), "shadow") }
 
-// Verbose be verbose: produce extra progress output and error diagnostics.
-//
-// This option can help the user decipher why a particular operation failed.
-// At a minimum, the probing of any specified images will be detailed.
-type Verbose bool
+type verbose bool
 
-func (v Verbose) attachFlag() []string { return boolFlag(bool(v), "verbose") }
-func (v Verbose) detachFlag() []string { return boolFlag(bool(v), "verbose") }
+func (v verbose) attachFlag() []string { return boolFlag(bool(v), "verbose") }
+func (v verbose) detachFlag() []string { return boolFlag(bool(v), "verbose") }
 
-// Quiet close stdout and stderr, leaving only hdiutil's exit status to indicate success or failure.
-// No /dev entries or mount points will be printed.
-//
-// -debug and -verbose disable -quiet.
-type Quiet bool
+type quiet bool
 
-func (q Quiet) attachFlag() []string { return boolFlag(bool(q), "quiet") }
-func (q Quiet) detachFlag() []string { return boolFlag(bool(q), "quiet") }
+func (q quiet) attachFlag() []string { return boolFlag(bool(q), "quiet") }
+func (q quiet) detachFlag() []string { return boolFlag(bool(q), "quiet") }
 
-// Debug be very verbose.
-//
-// This option is good if a large amount of progress information is needed.
-// As of Mac OS X 10.6, -debug enables -verbose.
-type Debug bool
+type debug bool
 
-func (d Debug) attachFlag() []string { return boolFlag(bool(d), "debug") }
-func (d Debug) detachFlag() []string { return boolFlag(bool(d), "debug") }
+func (d debug) attachFlag() []string { return boolFlag(bool(d), "debug") }
+func (d debug) detachFlag() []string { return boolFlag(bool(d), "debug") }
+
+const (
+	// Plist provide result output in plist format.
+	// Other programs invoking hdiutil are expected to use -plist rather than try to parse the human-readable output.
+	//
+	// The usual output is consistent but generally unstructured.
+	Plist plist = true
+
+	// Puppetstrings provide progress output that is easy for another program to parse.
+	// PERCENTAGE outputs can include the value -1 which means hdiutil is performing an operation that will take an indeterminate amount of time to complete.
+	//
+	// Any program trying to interpret hdiutil's progress should use -puppetstrings.
+	Puppetstrings puppetstrings = true
+
+	// Stdinpass read a null-terminated passphrase from standard input.
+	// If the standard input is a tty, the passphrase will be read with readpassphrase(3).
+	// Otherwise, the password is read from stdin.
+	//
+	// -stdinpass replaces -passphrase which has been deprecated.
+	// -passphrase is insecure because its argument appears in the output of ps(1) where it is visible to other users and processes on the system.
+	Stdinpass stdinpass = true
+
+	// Agentpass force the default behavior of prompting for a passphrase.
+	//
+	// Useful with -pubkey to create an image protected by both a passphrase and a public key.
+	Agentpass agentpass = true
+
+	// Insecurehttp ignore SSL host validation failures.
+	// Useful for self-signed servers for which the appropriate certificates are unavailable or if access to a server is desired when the server name doesn't match what is in the certificate.
+	Insecurehttp insecurehttp = true
+
+	// Verbose be verbose: produce extra progress output and error diagnostics.
+	//
+	// This option can help the user decipher why a particular operation failed.
+	// At a minimum, the probing of any specified images will be detailed.
+	Verbose verbose = true
+
+	// Quiet close stdout and stderr, leaving only hdiutil's exit status to indicate success or failure.
+	// No /dev entries or mount points will be printed.
+	//
+	// -debug and -verbose disable -quiet.
+	Quiet quiet = true
+
+	// Debug be very verbose.
+	//
+	// This option is good if a large amount of progress information is needed.
+	// As of Mac OS X 10.6, -debug enables -verbose.
+	Debug debug = true
+)
 
 // RawDeviceNode return the raw device node from the deviceNode.
 func RawDeviceNode(deviceNode string) string {
