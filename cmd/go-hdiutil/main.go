@@ -7,6 +7,7 @@ package main
 import (
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/go-darwin/hdiutil"
 )
@@ -25,11 +26,18 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if err := hdiutil.Create("test", hdiutil.CreateMegabytes(20), hdiutil.CreateAPFS); err != nil {
+	if err := hdiutil.Create("test", hdiutil.CreateMegabytes(20), hdiutil.CreateAPFS, hdiutil.CreateSPARSEBUNDLE); err != nil {
 		log.Fatal(err)
 	}
-	if _, err := os.Stat("test.dmg"); err != nil {
+
+	if _, err := filepath.Glob("test.*"); err != nil {
 		log.Fatal(err)
 	}
-	defer os.Remove("test.dmg")
+
+	defer func() {
+		files, _ := filepath.Glob("test.*")
+		for _, file := range files {
+			os.RemoveAll(file)
+		}
+	}()
 }
