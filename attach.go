@@ -6,6 +6,7 @@ package hdiutil
 
 import (
 	"bytes"
+	"fmt"
 	"os/exec"
 	"strconv"
 )
@@ -247,9 +248,9 @@ func Attach(image string, flags ...AttachFlag) (string, error) {
 		cmd.Args = append(cmd.Args, args...)
 	}
 
-	out, err := cmd.Output()
+	out, err := cmd.CombinedOutput()
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("%v: %v", err, string(out))
 	}
 
 	return string(bytes.TrimSpace(out)), nil
