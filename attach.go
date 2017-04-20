@@ -176,36 +176,100 @@ type autoFsck bool
 func (a autoFsck) attachFlag() string { return boolNoFlag(bool(a), "autofsck") }
 
 const (
-	AttachReadonly             rwType             = readonly
-	AttachReadWrite            rwType             = readwrite
-	AttachKernel               kernel             = true
-	AttachNoKernel             kernel             = false
-	AttachNotRemovable         notRemovable       = true
-	AttachMountRequired        mount              = "required"
-	AttachMountOptional        mount              = "optional"
-	AttachMountSuppressed      mount              = "suppressed"
-	AttachNoMount              noMount            = true
-	AttachNoBrowse             noBrowse           = true
-	AttachOwnersOn             owners             = ownersOn
-	AttachOwnersOff            owners             = ownersOff
-	AttachVerify               verify             = true
-	AttachNoVerify             verify             = false
-	AttachIgnoreBadChecksums   ignoreBadChecksums = true
+	// AttachReadonly force the resulting device to be read-only.
+	AttachReadonly rwType = readonly
+
+	// AttachReadWrite attempt to override the DiskImages framework's decision to attach a particular image read-only.
+	//
+	// For example, -readwrite can be used to modify the HFS+ filesystem on a HFS+/ISO hybrid CD image.
+	AttachReadWrite rwType = readwrite
+
+	// AttachKernel attempt to attach this image without a helper process; fail if unsupported.
+	//
+	// Only UDRW, UDRO, UDZO, ULFO, and UDSP images are supported in-kernel. Encryption and HTTP are supported by the kernel driver.
+	AttachKernel kernel = true
+
+	// AttachNoKernel attach with a helper process.  This is (again) the default as of Mac OS X 10.5.
+	AttachNoKernel kernel = false
+
+	// AttachNotRemovable prevent this image from being detached. Only root can use this option.
+	//
+	// A reboot is necessary to cleanly detach an image attached with -notremovable.
+	AttachNotRemovable notRemovable = true
+
+	// AttachMountRequired indicate to -mount required.
+	AttachMountRequired mount = "required"
+
+	// AttachMountOptional indicate to -mount optional.
+	AttachMountOptional mount = "optional"
+
+	// AttachMountSuppressed indicate to -mount suppressed.
+	AttachMountSuppressed mount = "suppressed"
+
+	// AttachNoMount identical to -mount suppressed
+	AttachNoMount noMount = true
+
+	// AttachNoBrowse render any volumes invisible in applications such as the macOS Finder.
+	AttachNoBrowse noBrowse = true
+
+	// AttachOwnersOn owners on any filesystems be honored.
+	AttachOwnersOn owners = ownersOn
+
+	// AttachOwnersOff owners on any filesystems be not honored.
+	AttachOwnersOff owners = ownersOff
+
+	// AttachVerify do verify the image.
+	AttachVerify verify = true
+
+	// AttachNoVerify do not verify the image.
+	AttachNoVerify verify = false
+
+	// AttachIgnoreBadChecksums bad checksums should be ignored.
+	AttachIgnoreBadChecksums ignoreBadChecksums = true
+
+	// AttachNoIgnoreBadChecksums bad checksums should be not ignored.
 	AttachNoIgnoreBadChecksums ignoreBadChecksums = false
-	AttachIdme                 idme               = true
-	AttachNoIdme               idme               = false
-	AttachIdmeReveal           idmeReveal         = true
-	AttachNoIdmeReveal         idmeReveal         = false
-	AttachIdmeTrash            idmeTrash          = true
-	AttachNoIdmeTrash          idmeTrash          = false
-	AttachAutoOpen             autoOpen           = true
-	AttachNoAutoOpen           autoOpen           = false
-	AttachAutoOpenRO           autoOpenRO         = true
-	AttachNoAutoOpenRO         autoOpenRO         = false
-	AttachAutoOpenRW           autoOpenRW         = true
-	AttachNoAutoOpenRW         autoOpenRW         = false
-	AttachAutoFsck             autoFsck           = true
-	AttachNoAutoFsck           autoFsck           = false
+
+	// AttachIdme do perform IDME actions on IDME images.
+	AttachIdme idme = true
+
+	// AttachNoIdme do not perform IDME actions on IDME images.
+	AttachNoIdme idme = false
+
+	// AttachIdmeReveal do reveal (in the Finder) the results of IDME processing.
+	AttachIdmeReveal idmeReveal = true
+
+	// AttachNoIdmeReveal do not reveal (in the Finder) the results of IDME processing.
+	AttachNoIdmeReveal idmeReveal = false
+
+	// AttachIdmeTrash do put IDME images in the trash after processing.
+	AttachIdmeTrash idmeTrash = true
+	// AttachNoIdmeTrash do not put IDME images in the trash after processing.
+	AttachNoIdmeTrash idmeTrash = false
+
+	// AttachAutoOpen do not auto-open volumes (in the Finder) after attaching an image.
+	AttachAutoOpen autoOpen = true
+
+	// AttachNoAutoOpen do not auto-open volumes (in the Finder) after attaching an image.
+	AttachNoAutoOpen autoOpen = false
+
+	// AttachAutoOpenRO do auto-open read-only volumes.
+	AttachAutoOpenRO autoOpenRO = true
+
+	// AttachNoAutoOpenRO do not auto-open read-only volumes.
+	AttachNoAutoOpenRO autoOpenRO = false
+
+	// AttachAutoOpenRW do auto-open read/write volumes.
+	AttachAutoOpenRW autoOpenRW = true
+
+	// AttachNoAutoOpenRW do not auto-open read/write volumes.
+	AttachNoAutoOpenRW autoOpenRW = false
+
+	// AttachAutoFsck do force automatic file system checking before mounting a disk image.
+	AttachAutoFsck autoFsck = true
+
+	// AttachNoAutoFsck do not force automatic file system checking before mounting a disk image.
+	AttachNoAutoFsck autoFsck = false
 )
 
 // Attach attach the image file. The returns device node path and error.
