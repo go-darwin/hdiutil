@@ -176,36 +176,36 @@ type autoFsck bool
 func (a autoFsck) attachFlag() string { return boolNoFlag(bool(a), "autofsck") }
 
 const (
-	Readonly             rwType             = readonly
-	ReadWrite            rwType             = readwrite
-	Kernel               kernel             = true
-	NoKernel             kernel             = false
-	NotRemovable         notRemovable       = true
-	MountRequired        mount              = "required"
-	MountOptional        mount              = "optional"
-	MountSuppressed      mount              = "suppressed"
-	NoMount              noMount            = true
-	NoBrowse             noBrowse           = true
-	OwnersOn             owners             = ownersOn
-	OwnersOff            owners             = ownersOff
-	Verify               verify             = true
-	NoVerify             verify             = false
-	IgnoreBadChecksums   ignoreBadChecksums = true
-	NoIgnoreBadChecksums ignoreBadChecksums = false
-	Idme                 idme               = true
-	NoIdme               idme               = false
-	IdmeReveal           idmeReveal         = true
-	NoIdmeReveal         idmeReveal         = false
-	IdmeTrash            idmeTrash          = true
-	NoIdmeTrash          idmeTrash          = false
-	AutoOpen             autoOpen           = true
-	NoAutoOpen           autoOpen           = false
-	AutoOpenRO           autoOpenRO         = true
-	NoAutoOpenRO         autoOpenRO         = false
-	AutoOpenRW           autoOpenRW         = true
-	NoAutoOpenRW         autoOpenRW         = false
-	AutoFsck             autoFsck           = true
-	NoAutoFsck           autoFsck           = false
+	AttachReadonly             rwType             = readonly
+	AttachReadWrite            rwType             = readwrite
+	AttachKernel               kernel             = true
+	AttachNoKernel             kernel             = false
+	AttachNotRemovable         notRemovable       = true
+	AttachMountRequired        mount              = "required"
+	AttachMountOptional        mount              = "optional"
+	AttachMountSuppressed      mount              = "suppressed"
+	AttachNoMount              noMount            = true
+	AttachNoBrowse             noBrowse           = true
+	AttachOwnersOn             owners             = ownersOn
+	AttachOwnersOff            owners             = ownersOff
+	AttachVerify               verify             = true
+	AttachNoVerify             verify             = false
+	AttachIgnoreBadChecksums   ignoreBadChecksums = true
+	AttachNoIgnoreBadChecksums ignoreBadChecksums = false
+	AttachIdme                 idme               = true
+	AttachNoIdme               idme               = false
+	AttachIdmeReveal           idmeReveal         = true
+	AttachNoIdmeReveal         idmeReveal         = false
+	AttachIdmeTrash            idmeTrash          = true
+	AttachNoIdmeTrash          idmeTrash          = false
+	AttachAutoOpen             autoOpen           = true
+	AttachNoAutoOpen           autoOpen           = false
+	AttachAutoOpenRO           autoOpenRO         = true
+	AttachNoAutoOpenRO         autoOpenRO         = false
+	AttachAutoOpenRW           autoOpenRW         = true
+	AttachNoAutoOpenRW         autoOpenRW         = false
+	AttachAutoFsck             autoFsck           = true
+	AttachNoAutoFsck           autoFsck           = false
 )
 
 // Attach attach the image file. The returns device node path and error.
