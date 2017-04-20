@@ -6,6 +6,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/go-darwin/hdiutil"
 )
@@ -23,4 +24,12 @@ func main() {
 	if err := hdiutil.Detach(deviceNode); err != nil {
 		log.Fatal(err)
 	}
+
+	if err := hdiutil.Create("test", hdiutil.CreateMegabytes(20), hdiutil.CreateAPFS); err != nil {
+		log.Fatal(err)
+	}
+	if _, err := os.Stat("test.dmg"); err != nil {
+		log.Fatal(err)
+	}
+	defer os.Remove("test.dmg")
 }
