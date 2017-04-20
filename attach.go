@@ -52,22 +52,22 @@ type noMount bool
 
 func (n noMount) attachFlag() string { return boolFlag(bool(n), "nomount") }
 
-// MountRoot mount volumes on subdirectories of path instead of under /Volumes. path must exist.
+// AttachMountRoot mount volumes on subdirectories of path instead of under /Volumes. path must exist.
 // Full mount point paths must be less than MNAMELEN characters (increased from 90 to 1024 in Mac OS X 10.6).
-type MountRoot string
+type AttachMountRoot string
 
-func (m MountRoot) attachFlag() string { return stringFlag(string(m), "mountroot") }
+func (m AttachMountRoot) attachFlag() string { return stringFlag(string(m), "mountroot") }
 
-// MountRandom like -mountroot, but mount point directory names are randomized with mkdtemp(3).
-type MountRandom string
+// AttachMountRandom like -mountroot, but mount point directory names are randomized with mkdtemp(3).
+type AttachMountRandom string
 
-func (m MountRandom) attachFlag() string { return stringFlag(string(m), "mountrandom") }
+func (m AttachMountRandom) attachFlag() string { return stringFlag(string(m), "mountrandom") }
 
-// MountPoint assuming only one volume, mount it at path instead of in /Volumes.
+// AttachMountPoint assuming only one volume, mount it at path instead of in /Volumes.
 // See fstab(5) for ways a system administrator can make particular volumes automatically mount in particular filesystem locations by editing the file /etc/fstab.
-type MountPoint string
+type AttachMountPoint string
 
-func (m MountPoint) attachFlag() string { return stringFlag(string(m), "mountpoint") }
+func (m AttachMountPoint) attachFlag() string { return stringFlag(string(m), "mountpoint") }
 
 type noBrowse bool
 
@@ -82,19 +82,19 @@ const (
 
 func (o owners) attachFlag() string { return stringFlag(string(o), "owners") }
 
-// Drivekey specify a key/value pair to be set on the device in the IOKit registry.
-type Drivekey [2]string
+// AttachDrivekey specify a key/value pair to be set on the device in the IOKit registry.
+type AttachDrivekey [2]string
 
-func (d Drivekey) attachFlag() string {
+func (d AttachDrivekey) attachFlag() string {
 	return stringFlag(d[0]+"="+d[1], "drivekey")
 }
 
-// Section attach a subsection of a disk image.
+// AttachSection attach a subsection of a disk image.
 // subspec is any of <offset>, <first-last>, or <start,count> in 0-based sectors.
 // Ranges are inclusive.
-type Section [2]int
+type AttachSection [2]int
 
-func (s Section) attachFlag() string {
+func (s AttachSection) attachFlag() string {
 	var arg string
 	for v := range s {
 		arg = arg + strconv.Itoa(v)
