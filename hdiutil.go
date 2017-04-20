@@ -28,8 +28,6 @@ import (
 // unflatten               udifrez
 // help                       display more detailed help
 
-const hdiutilPath = "/usr/bin/hdiutil"
-
 // EncryptionType specify a particular type of encryption.
 type EncryptionType int
 
