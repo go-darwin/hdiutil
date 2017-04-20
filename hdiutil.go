@@ -64,8 +64,38 @@ func (p puppetstrings) verifyFlag() []string { return boolFlag(bool(p), "puppets
 // Srcimagekey specify a key/value pair for the disk image recognition system. (-imagekey is normally a synonym)
 type Srcimagekey map[string]string
 
+func (s Srcimagekey) commonFlag() []string {
+	var arg string
+	for k, v := range s {
+		arg = k + "=" + v
+	}
+	return stringFlag(arg, "srcimagekey")
+}
+func (s Srcimagekey) attachFlag() []string { return s.commonFlag() }
+
 // Tgtimagekey specify a key/value pair for any image created. (-imagekey is only a synonym if there is no input image).
 type Tgtimagekey map[string]string
+
+func (t Tgtimagekey) commonFlag() []string {
+	var arg string
+	for k, v := range t {
+		arg = k + "=" + v
+	}
+	return stringFlag(arg, "tgtimagekey")
+}
+func (t Tgtimagekey) attachFlag() []string { return t.commonFlag() }
+
+// Imagekey is normally a synonym to Srcimagekey, only a synonym Tgtimagekey if there is no input image.
+type Imagekey map[string]string
+
+func (i Imagekey) commonFlag() []string {
+	var arg string
+	for k, v := range i {
+		arg = k + "=" + v
+	}
+	return stringFlag(arg, "imagekey")
+}
+func (i Imagekey) attachFlag() []string { return i.commonFlag() }
 
 // Encryption specify a particular type of encryption or, if not specified, the default encryption algorithm.
 //
