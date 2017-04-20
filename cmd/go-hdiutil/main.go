@@ -7,13 +7,21 @@ package main
 import (
 	"log"
 	"os"
-	"path/filepath"
 
 	"github.com/go-darwin/hdiutil"
 )
 
 func main() {
-	img := "/Users/zchee/.docker/machine/cache/boot2docker.iso"
+	img := "test.sparsebundle"
+
+	if err := hdiutil.Create("test", hdiutil.CreateMegabytes(20), hdiutil.CreateHFSPlus, hdiutil.CreateSPARSEBUNDLE); err != nil {
+		log.Fatal(err)
+	}
+	if _, err := os.Stat(img); err != nil {
+		log.Fatal(err)
+	}
+	defer os.RemoveAll(img)
+
 	deviceNode, err := hdiutil.Attach(img, hdiutil.AttachMountPoint("./test"), hdiutil.AttachNoVerify, hdiutil.AttachNoAutoFsck)
 	if err != nil {
 		log.Fatal(err)
@@ -25,19 +33,4 @@ func main() {
 	if err := hdiutil.Detach(deviceNode); err != nil {
 		log.Fatal(err)
 	}
-
-	if err := hdiutil.Create("test", hdiutil.CreateMegabytes(20), hdiutil.CreateAPFS, hdiutil.CreateSPARSEBUNDLE); err != nil {
-		log.Fatal(err)
-	}
-
-	if _, err := filepath.Glob("test.*"); err != nil {
-		log.Fatal(err)
-	}
-
-	defer func() {
-		files, _ := filepath.Glob("test.*")
-		for _, file := range files {
-			os.RemoveAll(file)
-		}
-	}()
 }
