@@ -72,6 +72,7 @@ func (s Srcimagekey) commonFlag() []string {
 	return stringFlag(arg, "srcimagekey")
 }
 func (s Srcimagekey) attachFlag() []string { return s.commonFlag() }
+func (s Srcimagekey) createFlag() []string { return s.commonFlag() }
 
 // Tgtimagekey specify a key/value pair for any image created. (-imagekey is only a synonym if there is no input image).
 type Tgtimagekey map[string]string
@@ -84,6 +85,7 @@ func (t Tgtimagekey) commonFlag() []string {
 	return stringFlag(arg, "tgtimagekey")
 }
 func (t Tgtimagekey) attachFlag() []string { return t.commonFlag() }
+func (t Tgtimagekey) createFlag() []string { return t.commonFlag() }
 
 // Imagekey is normally a synonym to Srcimagekey, only a synonym Tgtimagekey if there is no input image.
 type Imagekey map[string]string
@@ -96,6 +98,7 @@ func (i Imagekey) commonFlag() []string {
 	return stringFlag(arg, "imagekey")
 }
 func (i Imagekey) attachFlag() []string { return i.commonFlag() }
+func (i Imagekey) createFlag() []string { return i.commonFlag() }
 
 // Encryption specify a particular type of encryption or, if not specified, the default encryption algorithm.
 //
@@ -146,16 +149,19 @@ type verbose bool
 
 func (v verbose) attachFlag() []string { return boolFlag(bool(v), "verbose") }
 func (v verbose) detachFlag() []string { return boolFlag(bool(v), "verbose") }
+func (v verbose) createFlag() []string { return boolFlag(bool(v), "verbose") }
 
 type quiet bool
 
 func (q quiet) attachFlag() []string { return boolFlag(bool(q), "quiet") }
 func (q quiet) detachFlag() []string { return boolFlag(bool(q), "quiet") }
+func (q quiet) createFlag() []string { return boolFlag(bool(q), "quiet") }
 
 type debug bool
 
 func (d debug) attachFlag() []string { return boolFlag(bool(d), "debug") }
 func (d debug) detachFlag() []string { return boolFlag(bool(d), "debug") }
+func (d debug) createFlag() []string { return boolFlag(bool(d), "debug") }
 
 const (
 	// Plist provide result output in plist format.

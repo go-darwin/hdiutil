@@ -4,6 +4,8 @@
 
 package hdiutil
 
+import "strconv"
+
 func boolFlag(b bool, name string) []string {
 	if b {
 		return []string{"-" + name}
@@ -20,4 +22,14 @@ func boolNoFlag(b bool, name string) []string {
 
 func stringFlag(s, name string) []string {
 	return []string{"-" + name, s}
+}
+
+func stringSliceFlag(s []string, name string) []string {
+	a := []string{"-" + name}
+	a = append(a, s...)
+	return a
+}
+
+func intFlag(s int, name string) []string {
+	return []string{"-" + name, strconv.Itoa(s)}
 }
