@@ -88,12 +88,12 @@ type drivekey struct {
 	Value string
 }
 
-// section attach a subsection of a disk image.
+// Section attach a subsection of a disk image.
 // subspec is any of <offset>, <first-last>, or <start,count> in 0-based sectors.
 // Ranges are inclusive.
-type section [2]int
+type Section [2]int
 
-func (s section) attachFlag() string {
+func (s Section) attachFlag() string {
 	var arg string
 	for v := range s {
 		arg = arg + strconv.Itoa(v)
