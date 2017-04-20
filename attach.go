@@ -16,17 +16,17 @@ type attachFlag interface {
 	attachFlag() []string
 }
 
-type rwType int
+type attachRWType int
 
 const (
 	// Readonly force the resulting device to be read-only.
-	readonly rwType = 1 << iota
+	readonly attachRWType = 1 << iota
 	// Readwrite attempt to override the DiskImages framework's decision to attach a particular image read-only.
 	// For example, -readwrite can be used to modify the HFS+ filesystem on a HFS+/ISO hybrid CD image.
 	readwrite
 )
 
-func (rw rwType) attachFlag() string {
+func (rw attachRWType) attachFlag() string {
 	switch rw {
 	case readonly:
 		return "-readonly"
@@ -37,21 +37,21 @@ func (rw rwType) attachFlag() string {
 	}
 }
 
-type kernel bool
+type attachKernel bool
 
-func (k kernel) attachFlag() []string { return boolNoFlag(bool(k), "kernel") }
+func (k attachKernel) attachFlag() []string { return boolNoFlag(bool(k), "kernel") }
 
-type notRemovable bool
+type attachNotRemovable bool
 
-func (n notRemovable) attachFlag() []string { return boolFlag(bool(n), "notremovable") }
+func (n attachNotRemovable) attachFlag() []string { return boolFlag(bool(n), "notremovable") }
 
-type mount string
+type attachMount string
 
-func (m mount) attachFlag() []string { return stringFlag(string(m), "mount") }
+func (m attachMount) attachFlag() []string { return stringFlag(string(m), "mount") }
 
-type noMount bool
+type attachNoMount bool
 
-func (n noMount) attachFlag() []string { return boolFlag(bool(n), "nomount") }
+func (n attachNoMount) attachFlag() []string { return boolFlag(bool(n), "nomount") }
 
 // AttachMountRoot mount volumes on subdirectories of path instead of under /Volumes. path must exist.
 //
@@ -72,18 +72,18 @@ type AttachMountPoint string
 
 func (a AttachMountPoint) attachFlag() []string { return stringFlag(string(a), "mountpoint") }
 
-type noBrowse bool
+type attachNoBrowse bool
 
-func (n noBrowse) attachFlag() []string { return boolFlag(bool(n), "nobrowse") }
+func (n attachNoBrowse) attachFlag() []string { return boolFlag(bool(n), "nobrowse") }
 
-type owners string
+type attachOwners string
 
 const (
-	ownersOn  owners = "on"
-	ownersOff owners = "off"
+	ownersOn  attachOwners = "on"
+	ownersOff attachOwners = "off"
 )
 
-func (o owners) attachFlag() []string { return stringFlag(string(o), "owners") }
+func (o attachOwners) attachFlag() []string { return stringFlag(string(o), "owners") }
 
 // AttachDrivekey specify a key/value pair to be set on the device in the IOKit registry.
 type AttachDrivekey [2]string
@@ -105,137 +105,139 @@ func (a AttachSection) attachFlag() []string {
 	return stringFlag(arg, "section")
 }
 
-type verify bool
+type attachVerify bool
 
-func (v verify) attachFlag() []string { return boolNoFlag(bool(v), "verify") }
+func (v attachVerify) attachFlag() []string { return boolNoFlag(bool(v), "verify") }
 
-type ignoreBadChecksums bool
+type attachIgnoreBadChecksums bool
 
-func (i ignoreBadChecksums) attachFlag() []string { return boolNoFlag(bool(i), "ignoreBadChecksums") }
+func (i attachIgnoreBadChecksums) attachFlag() []string {
+	return boolNoFlag(bool(i), "ignoreBadChecksums")
+}
 
-type idme bool
+type attachIdme bool
 
-func (i idme) attachFlag() []string { return boolNoFlag(bool(i), "idme") }
+func (i attachIdme) attachFlag() []string { return boolNoFlag(bool(i), "idme") }
 
-type idmeReveal bool
+type atachIdmeReveal bool
 
-func (i idmeReveal) attachFlag() []string { return boolNoFlag(bool(i), "idmereveal") }
+func (i atachIdmeReveal) attachFlag() []string { return boolNoFlag(bool(i), "idmereveal") }
 
-type idmeTrash bool
+type attachIdmeTrash bool
 
-func (i idmeTrash) attachFlag() []string { return boolNoFlag(bool(i), "idmetrash") }
+func (i attachIdmeTrash) attachFlag() []string { return boolNoFlag(bool(i), "idmetrash") }
 
-type autoOpen bool
+type attachAutoOpen bool
 
-func (a autoOpen) attachFlag() []string { return boolNoFlag(bool(a), "autoopen") }
+func (a attachAutoOpen) attachFlag() []string { return boolNoFlag(bool(a), "autoopen") }
 
-type autoOpenRO bool
+type attachAutoOpenRO bool
 
-func (a autoOpenRO) attachFlag() []string { return boolNoFlag(bool(a), "autoopenro") }
+func (a attachAutoOpenRO) attachFlag() []string { return boolNoFlag(bool(a), "autoopenro") }
 
-type autoOpenRW bool
+type attachAutoOpenRW bool
 
-func (a autoOpenRW) attachFlag() []string { return boolNoFlag(bool(a), "autoopenrw") }
+func (a attachAutoOpenRW) attachFlag() []string { return boolNoFlag(bool(a), "autoopenrw") }
 
-type autoFsck bool
+type attachAutoFsck bool
 
-func (a autoFsck) attachFlag() []string { return boolNoFlag(bool(a), "autofsck") }
+func (a attachAutoFsck) attachFlag() []string { return boolNoFlag(bool(a), "autofsck") }
 
 const (
 	// AttachReadonly force the resulting device to be read-only.
-	AttachReadonly rwType = readonly
+	AttachReadonly attachRWType = readonly
 
 	// AttachReadWrite attempt to override the DiskImages framework's decision to attach a particular image read-only.
 	//
 	// For example, -readwrite can be used to modify the HFS+ filesystem on a HFS+/ISO hybrid CD image.
-	AttachReadWrite rwType = readwrite
+	AttachReadWrite attachRWType = readwrite
 
 	// AttachKernel attempt to attach this image without a helper process; fail if unsupported.
 	//
 	// Only UDRW, UDRO, UDZO, ULFO, and UDSP images are supported in-kernel. Encryption and HTTP are supported by the kernel driver.
-	AttachKernel kernel = true
+	AttachKernel attachKernel = true
 
 	// AttachNoKernel attach with a helper process.  This is (again) the default as of Mac OS X 10.5.
-	AttachNoKernel kernel = false
+	AttachNoKernel attachKernel = false
 
 	// AttachNotRemovable prevent this image from being detached. Only root can use this option.
 	//
 	// A reboot is necessary to cleanly detach an image attached with -notremovable.
-	AttachNotRemovable notRemovable = true
+	AttachNotRemovable attachNotRemovable = true
 
 	// AttachMountRequired indicate to -mount required.
-	AttachMountRequired mount = "required"
+	AttachMountRequired attachMount = "required"
 
 	// AttachMountOptional indicate to -mount optional.
-	AttachMountOptional mount = "optional"
+	AttachMountOptional attachMount = "optional"
 
 	// AttachMountSuppressed indicate to -mount suppressed.
-	AttachMountSuppressed mount = "suppressed"
+	AttachMountSuppressed attachMount = "suppressed"
 
 	// AttachNoMount identical to -mount suppressed
-	AttachNoMount noMount = true
+	AttachNoMount attachNoMount = true
 
 	// AttachNoBrowse render any volumes invisible in applications such as the macOS Finder.
-	AttachNoBrowse noBrowse = true
+	AttachNoBrowse attachNoBrowse = true
 
 	// AttachOwnersOn owners on any filesystems be honored.
-	AttachOwnersOn owners = ownersOn
+	AttachOwnersOn attachOwners = ownersOn
 
 	// AttachOwnersOff owners on any filesystems be not honored.
-	AttachOwnersOff owners = ownersOff
+	AttachOwnersOff attachOwners = ownersOff
 
 	// AttachVerify do verify the image.
-	AttachVerify verify = true
+	AttachVerify attachVerify = true
 
 	// AttachNoVerify do not verify the image.
-	AttachNoVerify verify = false
+	AttachNoVerify attachVerify = false
 
 	// AttachIgnoreBadChecksums bad checksums should be ignored.
-	AttachIgnoreBadChecksums ignoreBadChecksums = true
+	AttachIgnoreBadChecksums attachIgnoreBadChecksums = true
 
 	// AttachNoIgnoreBadChecksums bad checksums should be not ignored.
-	AttachNoIgnoreBadChecksums ignoreBadChecksums = false
+	AttachNoIgnoreBadChecksums attachIgnoreBadChecksums = false
 
 	// AttachIdme do perform IDME actions on IDME images.
-	AttachIdme idme = true
+	AttachIdme attachIdme = true
 
 	// AttachNoIdme do not perform IDME actions on IDME images.
-	AttachNoIdme idme = false
+	AttachNoIdme attachIdme = false
 
 	// AttachIdmeReveal do reveal (in the Finder) the results of IDME processing.
-	AttachIdmeReveal idmeReveal = true
+	AttachIdmeReveal atachIdmeReveal = true
 
 	// AttachNoIdmeReveal do not reveal (in the Finder) the results of IDME processing.
-	AttachNoIdmeReveal idmeReveal = false
+	AttachNoIdmeReveal atachIdmeReveal = false
 
 	// AttachIdmeTrash do put IDME images in the trash after processing.
-	AttachIdmeTrash idmeTrash = true
+	AttachIdmeTrash attachIdmeTrash = true
 	// AttachNoIdmeTrash do not put IDME images in the trash after processing.
-	AttachNoIdmeTrash idmeTrash = false
+	AttachNoIdmeTrash attachIdmeTrash = false
 
 	// AttachAutoOpen do not auto-open volumes (in the Finder) after attaching an image.
-	AttachAutoOpen autoOpen = true
+	AttachAutoOpen attachAutoOpen = true
 
 	// AttachNoAutoOpen do not auto-open volumes (in the Finder) after attaching an image.
-	AttachNoAutoOpen autoOpen = false
+	AttachNoAutoOpen attachAutoOpen = false
 
 	// AttachAutoOpenRO do auto-open read-only volumes.
-	AttachAutoOpenRO autoOpenRO = true
+	AttachAutoOpenRO attachAutoOpenRO = true
 
 	// AttachNoAutoOpenRO do not auto-open read-only volumes.
-	AttachNoAutoOpenRO autoOpenRO = false
+	AttachNoAutoOpenRO attachAutoOpenRO = false
 
 	// AttachAutoOpenRW do auto-open read/write volumes.
-	AttachAutoOpenRW autoOpenRW = true
+	AttachAutoOpenRW attachAutoOpenRW = true
 
 	// AttachNoAutoOpenRW do not auto-open read/write volumes.
-	AttachNoAutoOpenRW autoOpenRW = false
+	AttachNoAutoOpenRW attachAutoOpenRW = false
 
 	// AttachAutoFsck do force automatic file system checking before mounting a disk image.
-	AttachAutoFsck autoFsck = true
+	AttachAutoFsck attachAutoFsck = true
 
 	// AttachNoAutoFsck do not force automatic file system checking before mounting a disk image.
-	AttachNoAutoFsck autoFsck = false
+	AttachNoAutoFsck attachAutoFsck = false
 )
 
 var attachRe = regexp.MustCompile(`/dev/disk[\d]+`)
