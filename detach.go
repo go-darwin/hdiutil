@@ -11,12 +11,12 @@ type DetachFlag interface {
 	detachFlag() string
 }
 
-// DetachForce ignore open files on mounted volumes, etc.
 type detachForce bool
 
 func (d detachForce) detachFlag() string { return boolFlag(bool(d), "force") }
 
 const (
+	// DetachForce ignore open files on mounted volumes, etc.
 	DetachForce detachForce = true
 )
 
