@@ -49,14 +49,17 @@ func (e EncryptionType) String() string {
 }
 
 func (e EncryptionType) attachFlag() []string { return stringFlag(e.String(), "encryption") }
+func (e EncryptionType) verifyFlag() []string { return stringFlag(e.String(), "encryption") }
 
 type plist bool
 
 func (p plist) attachFlag() []string { return boolFlag(bool(p), "plist") }
+func (p plist) verifyFlag() []string { return boolFlag(bool(p), "plist") }
 
 type puppetstrings bool
 
 func (p puppetstrings) attachFlag() []string { return boolFlag(bool(p), "puppetstrings") }
+func (p puppetstrings) verifyFlag() []string { return boolFlag(bool(p), "puppetstrings") }
 
 // Srcimagekey specify a key/value pair for the disk image recognition system. (-imagekey is normally a synonym)
 type Srcimagekey map[string]string
@@ -72,6 +75,7 @@ type Encryption EncryptionType
 type stdinpass bool
 
 func (s stdinpass) attachFlag() []string { return boolFlag(bool(s), "stdinpass") }
+func (s stdinpass) verifyFlag() []string { return boolFlag(bool(s), "stdinpass") }
 
 type agentpass bool
 
