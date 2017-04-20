@@ -82,10 +82,11 @@ const (
 
 func (o owners) attachFlag() string { return stringFlag(string(o), "owners") }
 
-// drivekey specify a key/value pair to be set on the device in the IOKit registry.
-type drivekey struct {
-	Key   string
-	Value string
+// Drivekey specify a key/value pair to be set on the device in the IOKit registry.
+type Drivekey [2]string
+
+func (d Drivekey) attachFlag() string {
+	return stringFlag(d[0]+"="+d[1], "drivekey")
 }
 
 // Section attach a subsection of a disk image.
