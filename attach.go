@@ -254,7 +254,7 @@ func Attach(image string, flags ...attachFlagger) (string, error) {
 
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		return "", fmt.Errorf("%v: %v", err, string(out))
+		return "", fmt.Errorf("%v: %s", err, out)
 	}
 
 	return string(attachRe.Find(out)), nil
