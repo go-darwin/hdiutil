@@ -54,6 +54,7 @@ type noMount bool
 func (n noMount) attachFlag() []string { return boolFlag(bool(n), "nomount") }
 
 // AttachMountRoot mount volumes on subdirectories of path instead of under /Volumes. path must exist.
+//
 // Full mount point paths must be less than MNAMELEN characters (increased from 90 to 1024 in Mac OS X 10.6).
 type AttachMountRoot string
 
@@ -65,6 +66,7 @@ type AttachMountRandom string
 func (m AttachMountRandom) attachFlag() []string { return stringFlag(string(m), "mountrandom") }
 
 // AttachMountPoint assuming only one volume, mount it at path instead of in /Volumes.
+//
 // See fstab(5) for ways a system administrator can make particular volumes automatically mount in particular filesystem locations by editing the file /etc/fstab.
 type AttachMountPoint string
 
