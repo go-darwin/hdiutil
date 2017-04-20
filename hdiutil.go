@@ -157,18 +157,21 @@ const (
 	//
 	// This option can help the user decipher why a particular operation failed.
 	// At a minimum, the probing of any specified images will be detailed.
+	// BUG(zchee): not exit hdiutil command if set.
 	Verbose verbose = true
 
 	// Quiet close stdout and stderr, leaving only hdiutil's exit status to indicate success or failure.
 	// No /dev entries or mount points will be printed.
 	//
 	// -debug and -verbose disable -quiet.
+	// BUG(zchee): not get the command result such as device node path when attach.
 	Quiet quiet = true
 
 	// Debug be very verbose.
 	//
 	// This option is good if a large amount of progress information is needed.
 	// As of Mac OS X 10.6, -debug enables -verbose.
+	// BUG(zchee): not exit hdiutil command if set.
 	Debug debug = true
 )
 
