@@ -36,22 +36,14 @@ func (rw rwType) attachFlag() string {
 	}
 }
 
-// kernel attempt to attach this image without a helper process; fail if unsupported.
-// Only UDRW, UDRO, UDZO, ULFO, and UDSP images are supported in-kernel.
-// Encryption and HTTP are supported by the kernel driver.
-// -nokernel attach with a helper process. This is (again) the default as of Mac OS X 10.5.
 type kernel bool
 
 func (k kernel) attachFlag() string { return boolNoFlag(bool(k), "kernel") }
 
-// notremovable prevent this image from being detached. Only root can use this option.
-// A reboot is necessary to cleanly detach an image attached with -notremovable.
 type notRemovable bool
 
 func (n notRemovable) attachFlag() string { return boolFlag(bool(n), "notremovable") }
 
-// mount indicate whether filesystems in the image should be mounted or not.
-// The default is required (attach will fail if no filesystems mount).
 type mount string
 
 func (m mount) attachFlag() string { return stringFlag(string(m), "mount") }
@@ -77,18 +69,14 @@ type MountPoint string
 
 func (m MountPoint) attachFlag() string { return stringFlag(string(m), "mountpoint") }
 
-// noBrowse render any volumes invisible in applications such as the macOS Finder.
 type noBrowse bool
 
 func (n noBrowse) attachFlag() string { return boolFlag(bool(n), "nobrowse") }
 
-// owners specify that owners on any filesystems be honored or not.
 type owners string
 
 const (
-	// OwnersOn is -owners on
-	ownersOn owners = "on"
-	// OwnersOff is -owners off
+	ownersOn  owners = "on"
 	ownersOff owners = "off"
 )
 
@@ -113,64 +101,38 @@ func (s section) attachFlag() string {
 	return stringFlag(arg, "section")
 }
 
-// verify do [not] verify the image.
-// By default, hdiutil attach attempts to intelligently verify images that contain checksums before attaching them.
-// If hdiutil can write to an image it has verified, attach will store an attribute with
-// the image so that it will not be verified again unless its timestamp changes.
-// To maintain backwards compatibility, hdid(8) does not attempt to verify images before attaching them.
-// Preferences keys: skip-verify, skip-verify-remote, skip-verify-locked, skip-previously-verified
 type verify bool
 
 func (v verify) attachFlag() string { return boolNoFlag(bool(v), "verify") }
 
-// ignoreBadChecksums specify whether bad checksums should be ignored.
-// The default is to abort when a bad checksum is detected.
-// Preferences key: ignore-bad-checksums
 type ignoreBadChecksums bool
 
 func (i ignoreBadChecksums) attachFlag() string { return boolNoFlag(bool(i), "ignoreBadChecksums") }
 
-// idme do perform IDME actions on IDME images.
-// IDME actions are not performed by default.
-// Preferences key: skip-idme
 type idme bool
 
 func (i idme) attachFlag() string { return boolNoFlag(bool(i), "idme") }
 
-// idmeReveal do [not] reveal (in the Finder) the results of IDME processing.
-// Preferences key: skip-idme-reveal
 type idmeReveal bool
 
 func (i idmeReveal) attachFlag() string { return boolNoFlag(bool(i), "idmereveal") }
 
-// idmeTrash do [not] put IDME images in the trash after processing.
-// Preferences key: skip-idme-trash
 type idmeTrash bool
 
 func (i idmeTrash) attachFlag() string { return boolNoFlag(bool(i), "idmetrash") }
 
-// autoOpen do [not] auto-open volumes (in the Finder) after attaching an image.
-// By default, double-clicking a read-only disk image causes the resulting volume to be opened in the Finder.
-// hdiutil defaults to -noautoopen.
 type autoOpen bool
 
 func (a autoOpen) attachFlag() string { return boolNoFlag(bool(a), "autoopen") }
 
-// autoOpenRO do [not] auto-open read-only volumes.
-// Preferences key: auto-open-ro-root
 type autoOpenRO bool
 
 func (a autoOpenRO) attachFlag() string { return boolNoFlag(bool(a), "autoopenro") }
 
-// autoOpenRW do [not] auto-open read/write volumes.
-// Preferences key: auto-open-rw-root
 type autoOpenRW bool
 
 func (a autoOpenRW) attachFlag() string { return boolNoFlag(bool(a), "autoopenrw") }
 
-// autoFsck do [not] force automatic file system checking before mounting a disk image.
-// By default, only quarantined images (e.g. downloaded from the Internet) that have not previously passed fsck are checked.
-// Preferences key: auto-fsck
 type autoFsck bool
 
 func (a autoFsck) attachFlag() string { return boolNoFlag(bool(a), "autofsck") }
