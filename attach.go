@@ -11,8 +11,8 @@ import (
 	"strconv"
 )
 
-// attachFlagger implements a hdiutil attach command flag interface.
-type attachFlagger interface {
+// attachFlag implements a hdiutil attach command flag interface.
+type attachFlag interface {
 	attachFlag() []string
 }
 
@@ -241,7 +241,7 @@ const (
 var attachRe = regexp.MustCompile(`/dev/disk[\d]+`)
 
 // Attach attach the image file. The returns device node path and error.
-func Attach(image string, flags ...attachFlagger) (string, error) {
+func Attach(image string, flags ...attachFlag) (string, error) {
 	cmd := exec.Command(hdiutilPath, "attach", image)
 
 	if len(flags) != 0 {

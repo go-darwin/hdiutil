@@ -6,8 +6,8 @@ package hdiutil
 
 import "os/exec"
 
-// detachFlagger implements a hdiutil detach command flag interface.
-type detachFlagger interface {
+// detachFlag implements a hdiutil detach command flag interface.
+type detachFlag interface {
 	detachFlag() []string
 }
 
@@ -21,7 +21,7 @@ const (
 )
 
 // Detach detach a disk image and terminate any associated process.
-func Detach(deviceNode string, flags ...detachFlagger) error {
+func Detach(deviceNode string, flags ...detachFlag) error {
 	cmd := exec.Command(hdiutilPath, "detach", deviceNode)
 	if len(flags) != 0 {
 		for _, flag := range flags {

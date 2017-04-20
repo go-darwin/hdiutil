@@ -6,8 +6,8 @@ package hdiutil
 
 import "os/exec"
 
-// verifyFlagger implements a hdiutil verify command flag interface.
-type verifyFlagger interface {
+// verifyFlag implements a hdiutil verify command flag interface.
+type verifyFlag interface {
 	verifyFlag() []string
 }
 
@@ -24,7 +24,7 @@ const (
 )
 
 // Verify compute the checksum of a "read-only" or "compressed" image and verify it against the value stored in the image.
-func Verify(img string, flags ...verifyFlagger) error {
+func Verify(img string, flags ...verifyFlag) error {
 	cmd := exec.Command(hdiutilPath, "verify", img)
 	if len(flags) != 0 {
 		for _, flag := range flags {
