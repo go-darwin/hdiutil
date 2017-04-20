@@ -128,10 +128,12 @@ type (
 	Debug bool
 )
 
+// RawDeviceNode return the raw device node from the deviceNode.
 func RawDeviceNode(deviceNode string) string {
 	return strings.Replace(deviceNode, "disk", "rdisk", 1)
 }
 
+// DeviceNumber return the device number from the deviceNode.
 func DeviceNumber(deviceNode string) int {
 	n, err := strconv.Atoi(strings.TrimPrefix(deviceNode, "/dev/disk"))
 	if err != nil {
