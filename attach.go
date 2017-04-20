@@ -5,9 +5,9 @@
 package hdiutil
 
 import (
-	"bytes"
 	"fmt"
 	"os/exec"
+	"regexp"
 	"strconv"
 )
 
@@ -236,6 +236,8 @@ const (
 	AttachNoAutoFsck autoFsck = false
 )
 
+var attachRe = regexp.MustCompile(`/dev/disk[\d]+`)
+
 // Attach attach the image file. The returns device node path and error.
 func Attach(image string, flags ...AttachFlag) (string, error) {
 	cmd := exec.Command(hdiutilPath, "attach", image)
@@ -253,5 +255,5 @@ func Attach(image string, flags ...AttachFlag) (string, error) {
 		return "", fmt.Errorf("%v: %v", err, string(out))
 	}
 
-	return string(bytes.TrimSpace(out)), nil
+	return string(attachRe.Find(out)), nil
 }
