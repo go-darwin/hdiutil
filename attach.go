@@ -26,8 +26,8 @@ const (
 	readwrite
 )
 
-func (rw attachRWType) attachFlag() string {
-	switch rw {
+func (a attachRWType) attachFlag() string {
+	switch a {
 	case readonly:
 		return "-readonly"
 	case readwrite:
@@ -39,19 +39,19 @@ func (rw attachRWType) attachFlag() string {
 
 type attachKernel bool
 
-func (k attachKernel) attachFlag() []string { return boolNoFlag(bool(k), "kernel") }
+func (a attachKernel) attachFlag() []string { return boolNoFlag(bool(a), "kernel") }
 
 type attachNotRemovable bool
 
-func (n attachNotRemovable) attachFlag() []string { return boolFlag(bool(n), "notremovable") }
+func (a attachNotRemovable) attachFlag() []string { return boolFlag(bool(a), "notremovable") }
 
 type attachMount string
 
-func (m attachMount) attachFlag() []string { return stringFlag(string(m), "mount") }
+func (a attachMount) attachFlag() []string { return stringFlag(string(a), "mount") }
 
 type attachNoMount bool
 
-func (n attachNoMount) attachFlag() []string { return boolFlag(bool(n), "nomount") }
+func (a attachNoMount) attachFlag() []string { return boolFlag(bool(a), "nomount") }
 
 // AttachMountRoot mount volumes on subdirectories of path instead of under /Volumes. path must exist.
 //
@@ -74,7 +74,7 @@ func (a AttachMountPoint) attachFlag() []string { return stringFlag(string(a), "
 
 type attachNoBrowse bool
 
-func (n attachNoBrowse) attachFlag() []string { return boolFlag(bool(n), "nobrowse") }
+func (a attachNoBrowse) attachFlag() []string { return boolFlag(bool(a), "nobrowse") }
 
 type attachOwners string
 
@@ -83,7 +83,7 @@ const (
 	ownersOff attachOwners = "off"
 )
 
-func (o attachOwners) attachFlag() []string { return stringFlag(string(o), "owners") }
+func (a attachOwners) attachFlag() []string { return stringFlag(string(a), "owners") }
 
 // AttachDrivekey specify a key/value pair to be set on the device in the IOKit registry.
 type AttachDrivekey [2]string
@@ -107,25 +107,25 @@ func (a AttachSection) attachFlag() []string {
 
 type attachVerify bool
 
-func (v attachVerify) attachFlag() []string { return boolNoFlag(bool(v), "verify") }
+func (a attachVerify) attachFlag() []string { return boolNoFlag(bool(a), "verify") }
 
 type attachIgnoreBadChecksums bool
 
-func (i attachIgnoreBadChecksums) attachFlag() []string {
-	return boolNoFlag(bool(i), "ignoreBadChecksums")
+func (a attachIgnoreBadChecksums) attachFlag() []string {
+	return boolNoFlag(bool(a), "ignoreBadChecksums")
 }
 
 type attachIdme bool
 
-func (i attachIdme) attachFlag() []string { return boolNoFlag(bool(i), "idme") }
+func (a attachIdme) attachFlag() []string { return boolNoFlag(bool(a), "idme") }
 
 type atachIdmeReveal bool
 
-func (i atachIdmeReveal) attachFlag() []string { return boolNoFlag(bool(i), "idmereveal") }
+func (a atachIdmeReveal) attachFlag() []string { return boolNoFlag(bool(a), "idmereveal") }
 
 type attachIdmeTrash bool
 
-func (i attachIdmeTrash) attachFlag() []string { return boolNoFlag(bool(i), "idmetrash") }
+func (a attachIdmeTrash) attachFlag() []string { return boolNoFlag(bool(a), "idmetrash") }
 
 type attachAutoOpen bool
 
