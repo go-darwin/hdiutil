@@ -12,9 +12,13 @@ type DetachFlag interface {
 }
 
 // DetachForce ignore open files on mounted volumes, etc.
-type DetachForce bool
+type detachForce bool
 
-func (d DetachForce) detachFlag() string { return boolFlag(bool(d), "force") }
+func (d detachForce) detachFlag() string { return boolFlag(bool(d), "force") }
+
+const (
+	DetachForce detachForce = true
+)
 
 // Detach detach a disk image and terminate any associated process.
 func Detach(deviceNode string, flags ...DetachFlag) error {
