@@ -13,7 +13,7 @@ import (
 
 // AttachFlag implements a hdiutil attach command flag interface.
 type AttachFlag interface {
-	attachFlag() string
+	attachFlag() []string
 }
 
 type rwType int
@@ -39,40 +39,40 @@ func (rw rwType) attachFlag() string {
 
 type kernel bool
 
-func (k kernel) attachFlag() string { return boolNoFlag(bool(k), "kernel") }
+func (k kernel) attachFlag() []string { return boolNoFlag(bool(k), "kernel") }
 
 type notRemovable bool
 
-func (n notRemovable) attachFlag() string { return boolFlag(bool(n), "notremovable") }
+func (n notRemovable) attachFlag() []string { return boolFlag(bool(n), "notremovable") }
 
 type mount string
 
-func (m mount) attachFlag() string { return stringFlag(string(m), "mount") }
+func (m mount) attachFlag() []string { return stringFlag(string(m), "mount") }
 
 type noMount bool
 
-func (n noMount) attachFlag() string { return boolFlag(bool(n), "nomount") }
+func (n noMount) attachFlag() []string { return boolFlag(bool(n), "nomount") }
 
 // AttachMountRoot mount volumes on subdirectories of path instead of under /Volumes. path must exist.
 // Full mount point paths must be less than MNAMELEN characters (increased from 90 to 1024 in Mac OS X 10.6).
 type AttachMountRoot string
 
-func (m AttachMountRoot) attachFlag() string { return stringFlag(string(m), "mountroot") }
+func (m AttachMountRoot) attachFlag() []string { return stringFlag(string(m), "mountroot") }
 
 // AttachMountRandom like -mountroot, but mount point directory names are randomized with mkdtemp(3).
 type AttachMountRandom string
 
-func (m AttachMountRandom) attachFlag() string { return stringFlag(string(m), "mountrandom") }
+func (m AttachMountRandom) attachFlag() []string { return stringFlag(string(m), "mountrandom") }
 
 // AttachMountPoint assuming only one volume, mount it at path instead of in /Volumes.
 // See fstab(5) for ways a system administrator can make particular volumes automatically mount in particular filesystem locations by editing the file /etc/fstab.
 type AttachMountPoint string
 
-func (m AttachMountPoint) attachFlag() string { return stringFlag(string(m), "mountpoint") }
+func (m AttachMountPoint) attachFlag() []string { return stringFlag(string(m), "mountpoint") }
 
 type noBrowse bool
 
-func (n noBrowse) attachFlag() string { return boolFlag(bool(n), "nobrowse") }
+func (n noBrowse) attachFlag() []string { return boolFlag(bool(n), "nobrowse") }
 
 type owners string
 
@@ -81,12 +81,12 @@ const (
 	ownersOff owners = "off"
 )
 
-func (o owners) attachFlag() string { return stringFlag(string(o), "owners") }
+func (o owners) attachFlag() []string { return stringFlag(string(o), "owners") }
 
 // AttachDrivekey specify a key/value pair to be set on the device in the IOKit registry.
 type AttachDrivekey [2]string
 
-func (d AttachDrivekey) attachFlag() string {
+func (d AttachDrivekey) attachFlag() []string {
 	return stringFlag(d[0]+"="+d[1], "drivekey")
 }
 
@@ -95,7 +95,7 @@ func (d AttachDrivekey) attachFlag() string {
 // Ranges are inclusive.
 type AttachSection [2]int
 
-func (s AttachSection) attachFlag() string {
+func (s AttachSection) attachFlag() []string {
 	var arg string
 	for v := range s {
 		arg = arg + strconv.Itoa(v)
@@ -105,39 +105,39 @@ func (s AttachSection) attachFlag() string {
 
 type verify bool
 
-func (v verify) attachFlag() string { return boolNoFlag(bool(v), "verify") }
+func (v verify) attachFlag() []string { return boolNoFlag(bool(v), "verify") }
 
 type ignoreBadChecksums bool
 
-func (i ignoreBadChecksums) attachFlag() string { return boolNoFlag(bool(i), "ignoreBadChecksums") }
+func (i ignoreBadChecksums) attachFlag() []string { return boolNoFlag(bool(i), "ignoreBadChecksums") }
 
 type idme bool
 
-func (i idme) attachFlag() string { return boolNoFlag(bool(i), "idme") }
+func (i idme) attachFlag() []string { return boolNoFlag(bool(i), "idme") }
 
 type idmeReveal bool
 
-func (i idmeReveal) attachFlag() string { return boolNoFlag(bool(i), "idmereveal") }
+func (i idmeReveal) attachFlag() []string { return boolNoFlag(bool(i), "idmereveal") }
 
 type idmeTrash bool
 
-func (i idmeTrash) attachFlag() string { return boolNoFlag(bool(i), "idmetrash") }
+func (i idmeTrash) attachFlag() []string { return boolNoFlag(bool(i), "idmetrash") }
 
 type autoOpen bool
 
-func (a autoOpen) attachFlag() string { return boolNoFlag(bool(a), "autoopen") }
+func (a autoOpen) attachFlag() []string { return boolNoFlag(bool(a), "autoopen") }
 
 type autoOpenRO bool
 
-func (a autoOpenRO) attachFlag() string { return boolNoFlag(bool(a), "autoopenro") }
+func (a autoOpenRO) attachFlag() []string { return boolNoFlag(bool(a), "autoopenro") }
 
 type autoOpenRW bool
 
-func (a autoOpenRW) attachFlag() string { return boolNoFlag(bool(a), "autoopenrw") }
+func (a autoOpenRW) attachFlag() []string { return boolNoFlag(bool(a), "autoopenrw") }
 
 type autoFsck bool
 
-func (a autoFsck) attachFlag() string { return boolNoFlag(bool(a), "autofsck") }
+func (a autoFsck) attachFlag() []string { return boolNoFlag(bool(a), "autofsck") }
 
 const (
 	// AttachReadonly force the resulting device to be read-only.
@@ -243,7 +243,7 @@ func Attach(image string, flags ...AttachFlag) (string, error) {
 	if len(flags) != 0 {
 		args := []string{}
 		for _, f := range flags {
-			args = append(args, f.attachFlag())
+			args = append(args, f.attachFlag()...)
 		}
 		cmd.Args = append(cmd.Args, args...)
 	}

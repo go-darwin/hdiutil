@@ -8,12 +8,12 @@ import "os/exec"
 
 // DetachFlag implements a hdiutil detach command flag interface.
 type DetachFlag interface {
-	detachFlag() string
+	detachFlag() []string
 }
 
 type detachForce bool
 
-func (d detachForce) detachFlag() string { return boolFlag(bool(d), "force") }
+func (d detachForce) detachFlag() []string { return boolFlag(bool(d), "force") }
 
 const (
 	// DetachForce ignore open files on mounted volumes, etc.
@@ -25,7 +25,7 @@ func Detach(deviceNode string, flags ...DetachFlag) error {
 	cmd := exec.Command(hdiutilPath, "detach", deviceNode)
 	if len(flags) != 0 {
 		for _, flag := range flags {
-			cmd.Args = append(cmd.Args, flag.detachFlag())
+			cmd.Args = append(cmd.Args, flag.detachFlag()...)
 		}
 	}
 

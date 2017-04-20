@@ -4,24 +4,20 @@
 
 package hdiutil
 
-import (
-	"fmt"
-)
-
-func boolFlag(b bool, name string) string {
+func boolFlag(b bool, name string) []string {
 	if b {
-		return "-" + name
+		return []string{"-" + name}
 	}
-	return ""
+	return nil
 }
 
-func boolNoFlag(b bool, name string) string {
+func boolNoFlag(b bool, name string) []string {
 	if b {
-		return "-" + name
+		return []string{"-" + name}
 	}
-	return "-no" + name
+	return []string{"-no" + name}
 }
 
-func stringFlag(s, name string) string {
-	return fmt.Sprintf("-%s %s", name, s)
+func stringFlag(s, name string) []string {
+	return []string{"-" + name, s}
 }
