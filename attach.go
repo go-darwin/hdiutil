@@ -58,19 +58,19 @@ func (n noMount) attachFlag() []string { return boolFlag(bool(n), "nomount") }
 // Full mount point paths must be less than MNAMELEN characters (increased from 90 to 1024 in Mac OS X 10.6).
 type AttachMountRoot string
 
-func (m AttachMountRoot) attachFlag() []string { return stringFlag(string(m), "mountroot") }
+func (a AttachMountRoot) attachFlag() []string { return stringFlag(string(a), "mountroot") }
 
 // AttachMountRandom like -mountroot, but mount point directory names are randomized with mkdtemp(3).
 type AttachMountRandom string
 
-func (m AttachMountRandom) attachFlag() []string { return stringFlag(string(m), "mountrandom") }
+func (a AttachMountRandom) attachFlag() []string { return stringFlag(string(a), "mountrandom") }
 
 // AttachMountPoint assuming only one volume, mount it at path instead of in /Volumes.
 //
 // See fstab(5) for ways a system administrator can make particular volumes automatically mount in particular filesystem locations by editing the file /etc/fstab.
 type AttachMountPoint string
 
-func (m AttachMountPoint) attachFlag() []string { return stringFlag(string(m), "mountpoint") }
+func (a AttachMountPoint) attachFlag() []string { return stringFlag(string(a), "mountpoint") }
 
 type noBrowse bool
 
@@ -88,8 +88,8 @@ func (o owners) attachFlag() []string { return stringFlag(string(o), "owners") }
 // AttachDrivekey specify a key/value pair to be set on the device in the IOKit registry.
 type AttachDrivekey [2]string
 
-func (d AttachDrivekey) attachFlag() []string {
-	return stringFlag(d[0]+"="+d[1], "drivekey")
+func (a AttachDrivekey) attachFlag() []string {
+	return stringFlag(a[0]+"="+a[1], "drivekey")
 }
 
 // AttachSection attach a subsection of a disk image.
@@ -97,9 +97,9 @@ func (d AttachDrivekey) attachFlag() []string {
 // Ranges are inclusive.
 type AttachSection [2]int
 
-func (s AttachSection) attachFlag() []string {
+func (a AttachSection) attachFlag() []string {
 	var arg string
-	for v := range s {
+	for v := range a {
 		arg = arg + strconv.Itoa(v)
 	}
 	return stringFlag(arg, "section")
