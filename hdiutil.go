@@ -134,6 +134,7 @@ func (s Shadow) attachFlag() []string { return stringFlag(string(s), "shadow") }
 type Verbose bool
 
 func (v Verbose) attachFlag() []string { return boolFlag(bool(v), "verbose") }
+func (v Verbose) detachFlag() []string { return boolFlag(bool(v), "verbose") }
 
 // Quiet close stdout and stderr, leaving only hdiutil's exit status to indicate success or failure.
 // No /dev entries or mount points will be printed.
@@ -142,6 +143,7 @@ func (v Verbose) attachFlag() []string { return boolFlag(bool(v), "verbose") }
 type Quiet bool
 
 func (q Quiet) attachFlag() []string { return boolFlag(bool(q), "quiet") }
+func (q Quiet) detachFlag() []string { return boolFlag(bool(q), "quiet") }
 
 // Debug be very verbose.
 //
@@ -150,6 +152,7 @@ func (q Quiet) attachFlag() []string { return boolFlag(bool(q), "quiet") }
 type Debug bool
 
 func (d Debug) attachFlag() []string { return boolFlag(bool(d), "debug") }
+func (d Debug) detachFlag() []string { return boolFlag(bool(d), "debug") }
 
 // RawDeviceNode return the raw device node from the deviceNode.
 func RawDeviceNode(deviceNode string) string {
