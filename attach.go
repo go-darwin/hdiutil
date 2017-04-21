@@ -19,10 +19,7 @@ type attachFlag interface {
 type attachRWType int
 
 const (
-	// Readonly force the resulting device to be read-only.
 	readonly attachRWType = 1 << iota
-	// Readwrite attempt to override the DiskImages framework's decision to attach a particular image read-only.
-	// For example, -readwrite can be used to modify the HFS+ filesystem on a HFS+/ISO hybrid CD image.
 	readwrite
 )
 
@@ -60,7 +57,7 @@ type AttachMountRoot string
 
 func (a AttachMountRoot) attachFlag() []string { return stringFlag("mountroot", string(a)) }
 
-// AttachMountRandom like -mountroot, but mount point directory names are randomized with mkdtemp(3).
+// AttachMountRandom like AttachMountRoot, but mount point directory names are randomized with mkdtemp(3).
 type AttachMountRandom string
 
 func (a AttachMountRandom) attachFlag() []string { return stringFlag("mountrandom", string(a)) }
@@ -149,7 +146,7 @@ const (
 
 	// AttachReadWrite attempt to override the DiskImages framework's decision to attach a particular image read-only.
 	//
-	// For example, -readwrite can be used to modify the HFS+ filesystem on a HFS+/ISO hybrid CD image.
+	// For example, AttachReadWrite can be used to modify the HFS+ filesystem on a HFS+/ISO hybrid CD image.
 	AttachReadWrite attachRWType = readwrite
 
 	// AttachKernel attempt to attach this image without a helper process; fail if unsupported.
@@ -157,24 +154,24 @@ const (
 	// Only UDRW, UDRO, UDZO, ULFO, and UDSP images are supported in-kernel. Encryption and HTTP are supported by the kernel driver.
 	AttachKernel attachKernel = true
 
-	// AttachNoKernel attach with a helper process.  This is (again) the default as of Mac OS X 10.5.
+	// AttachNoKernel attach with a helper process. This is (again) the default as of Mac OS X 10.5.
 	AttachNoKernel attachKernel = false
 
 	// AttachNotRemovable prevent this image from being detached. Only root can use this option.
 	//
-	// A reboot is necessary to cleanly detach an image attached with -notremovable.
+	// A reboot is necessary to cleanly detach an image attached with AttachNotRemovable.
 	AttachNotRemovable attachNotRemovable = true
 
-	// AttachMountRequired indicate to -mount required.
+	// AttachMountRequired indicate to mount required.
 	AttachMountRequired attachMount = "required"
 
-	// AttachMountOptional indicate to -mount optional.
+	// AttachMountOptional indicate to mount optional.
 	AttachMountOptional attachMount = "optional"
 
-	// AttachMountSuppressed indicate to -mount suppressed.
+	// AttachMountSuppressed indicate to mount suppressed.
 	AttachMountSuppressed attachMount = "suppressed"
 
-	// AttachNoMount identical to -mount suppressed
+	// AttachNoMount identical to AttachMountSuppressed.
 	AttachNoMount attachNoMount = true
 
 	// AttachNoBrowse render any volumes invisible in applications such as the macOS Finder.
@@ -212,6 +209,7 @@ const (
 
 	// AttachIdmeTrash do put IDME images in the trash after processing.
 	AttachIdmeTrash attachIdmeTrash = true
+
 	// AttachNoIdmeTrash do not put IDME images in the trash after processing.
 	AttachNoIdmeTrash attachIdmeTrash = false
 

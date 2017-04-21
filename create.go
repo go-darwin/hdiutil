@@ -6,6 +6,7 @@ package hdiutil
 
 import "os/exec"
 
+// sizeFlag implements a hdiutil create command size flag interface.
 type sizeFlag interface {
 	sizeFlag() []string
 }
@@ -13,9 +14,9 @@ type sizeFlag interface {
 // CreateSize specify the size of the image in the style of mkfile(8) with the addition of tera-, peta-, and exa-bytes sizes.
 //
 // The larger sizes are useful for large sparse images.
-type CreateSize int
+type CreateSize string
 
-func (c CreateSize) sizeFlag() []string { return intFlag("size", int(c)) }
+func (c CreateSize) sizeFlag() []string { return stringFlag("size", string(c)) }
 
 // CreateSectors specify the size of the image file in 512-byte sectors.
 type CreateSectors int
@@ -30,10 +31,10 @@ func (c CreateMegabytes) sizeFlag() []string { return intFlag("megabytes", int(c
 // CreateSrcfolder copies file-by-file the contents of source into image, creating a fresh (theoretically defragmented) filesystem on the destination.
 //
 // The resulting image is thus recommended for use with asr(8) since it will have a minimal amount of unused space.
-// Its size will be that of the source data plus some padding for filesystem overhead.  The filesystem type of the image volume will match that of the source as closely as possible unless overridden with -fs.
+// Its size will be that of the source data plus some padding for filesystem overhead. The filesystem type of the image volume will match that of the source as closely as possible unless overridden with -fs.
 //
-// Other size specifiers, such as -size, will override the default size calculation based on the source content, allowing for more or less free space in the resulting filesystem.
-// -srcfolder can be specified more than once, in which case the image volume will be populated at the top level with a copy of each specified filesystem object.
+// Other size specifiers, such as CreateSize, will override the default size calculation based on the source content, allowing for more or less free space in the resulting filesystem.
+// CreateSrcfolder can be specified more than once, in which case the image volume will be populated at the top level with a copy of each specified filesystem object.
 type CreateSrcfolder string
 
 func (c CreateSrcfolder) sizeFlag() []string { return stringFlag("srcfolder", string(c)) }
@@ -46,16 +47,16 @@ func (c CreateSrcdir) sizeFlag() []string { return stringFlag("srcdir", string(c
 // CreateSrcdevice specifies that the blocks of device should be used to create a new image.
 //
 // The image size will match the size of device. resize can be used to adjust the size of resizable filesystems and writable images.
-// Both -srcdevice and -srcfolder can run into errors if there are bad blocks on a disk.
+// Both CreateSrcdevice and CreateSrcfolder can run into errors if there are bad blocks on a disk.
 // One way around this problem is to write over the files in question in the hopes that the drive will remap the bad blocks.
 // Data will be lost, but the image creation operation will subsequently succeed.
 //
-// Filesystem options (like -fs, -volname, -stretch, or -size) are invalid and ignored when using -srcdevice.
+// Filesystem options (like createFS, CreateVolname, CreateStretch, or CreateSize) are invalid and ignored when using CreateSrcdevice.
 type CreateSrcdevice string
 
 func (c CreateSrcdevice) sizeFlag() []string { return stringFlag("srcdevice", string(c)) }
 
-// createFlag implements a hdiutil detach command flag interface.
+// createFlag implements a hdiutil create command flag interface.
 type createFlag interface {
 	createFlag() []string
 }
@@ -150,19 +151,19 @@ type CreateVolname string
 
 func (c CreateVolname) createFlag() []string { return stringFlag("volname", string(c)) }
 
-// CreateUID the root of the newly-created volume will be owned by the given numeric user id. 99 maps to the magic `unknown' user.
+// CreateUID the root of the newly-created volume will be owned by the given numeric user id. 99 maps to the magic 'unknown' user.
 type CreateUID int
 
 func (c CreateUID) createFlag() []string { return intFlag("uid", int(c)) }
 
-// CreateGID the root of the newly-created volume will be owned by the given numeric group id. 99 maps to `unknown'.
+// CreateGID the root of the newly-created volume will be owned by the given numeric group id. 99 maps to 'unknown'.
 type CreateGID int
 
 func (c CreateGID) createFlag() []string { return intFlag("gid", int(c)) }
 
 // CreateMode the root of the newly-created volume will have mode (in octal) mode.
 //
-// The default mode is determined by the filesystem's newfs unless -srcfolder is specified, in which case the default mode is derived from the specified filesystem object.
+// The default mode is determined by the filesystem's newfs unless CreateSrcfolder is specified, in which case the default mode is derived from the specified filesystem object.
 type CreateMode string
 
 func (c CreateMode) createFlag() []string { return stringFlag("mode", string(c)) }
@@ -171,36 +172,39 @@ type createAutostretch bool
 
 func (c createAutostretch) createFlag() []string { return boolNoFlag("autostretch", bool(c)) }
 
-// CreateStretch initializes HFS+ filesystem data such that it can later be stretched on older systems (which could only stretch within predefined limits) using hdiutil resize or by asr(8). max_stretch is specified like CreateSize.
+// CreateStretch initializes HFS+ filesystem data such that it can later be stretched on older systems (which could only stretch within predefined limits) using hdiutil resize or by asr(8). max_stretch(int) is specified like CreateSize.
 //
 // CreateStretch is invalid and ignored when using CreateSrcdevice.
 type CreateStretch int
 
 func (c CreateStretch) createFlag() []string { return intFlag("stretch", int(c)) }
 
-// CreateFSArgs additional arguments to pass to whichever newfs program is implied by -fs.
+// CreateFSArgs additional arguments to pass to whichever newfs program is implied by createFS.
 //
 // As an example with HFS+, newfs_hfs(8) has a number of options that can control the amount of space used by the filesystem's data structures.
 type CreateFSArgs []string
 
 func (c CreateFSArgs) createFlag() []string { return stringSliceFlag("fsargs", c) }
 
-// CreateLayout specify the partition layout of the image.  layout can be anything supported by MediaKit.framework.  NONE creates an image with no partition map.  When such an image is attached, a single /dev entry will be created (e.g. /dev/disk1).
+// CreateLayout specify the partition layout of the image.
 //
-// `SPUD' causes a DDM and an Apple Partition Scheme partition map with a single entry to be written.  `GPTSPUD' creates a similar image but with a GUID Partition Scheme map instead.  When attached, multiple /dev entries will be created, with either
-// slice 1 (GPT) or slice 2 (APM) as the data partition.  (e.g. /dev/disk1, /dev/disk1s1, /dev/disk1s2).
+// layout can be anything supported by MediaKit.framework.
+// NONE creates an image with no partition map.When such an image is attached, a single /dev entry will be created (e.g. /dev/disk1).
 //
-// Unless overridden by -fs, the default layout is `GPTSPUD' (PPC systems used `SPUD' prior to Mac OS X 10.6).  Other layouts include `MBRSPUD' and `ISOCD'.  create -help lists all supported layouts.
+// 'SPUD' causes a DDM and an Apple Partition Scheme partition map with a single entry to be written. 'GPTSPUD' creates a similar image but with a GUID Partition Scheme map instead.
+// When attached, multiple /dev entries will be created, with either slice 1 (GPT) or slice 2 (APM) as the data partition. (e.g. /dev/disk1, /dev/disk1s1, /dev/disk1s2).
+//
+// Unless overridden by createFS, the default layout is 'GPTSPUD' (PPC systems used 'SPUD' prior to Mac OS X 10.6). Other layouts include 'MBRSPUD' and 'ISOCD'. create -help lists all supported layouts.
 type CreateLayout string
 
-func (c CreateLayout) createFlag() []string { return stringFlag(string(c), "layout") }
+func (c CreateLayout) createFlag() []string { return stringFlag("layout", string(c)) }
 
 // CreateLibrary specify an alternate layout library. The default is MediaKit's MKDrivers.bundle.
 type CreateLibrary string
 
 func (c CreateLibrary) createFlag() []string { return stringFlag("library", string(c)) }
 
-// CreatePartitionType change the type of partition in a single-partition disk image. The default is Apple_HFS unless -fs implies otherwise.
+// CreatePartitionType change the type of partition in a single-partition disk image. The default is Apple_HFS unless createFS implies otherwise.
 type CreatePartitionType string
 
 func (c CreatePartitionType) createFlag() []string { return stringFlag("partitionType", string(c)) }
@@ -218,7 +222,7 @@ type CreateFormat string
 
 func (c CreateFormat) createFlag() []string { return stringFlag("format", string(c)) }
 
-// CreateSegmentSize specify that the image should be written in segments no bigger than size_spec (which follows -size conventions).
+// CreateSegmentSize specify that the image should be written in segments no bigger than size_spec (which follows CreateSize conventions).
 type CreateSegmentSize int
 
 func (c CreateSegmentSize) createFlag() []string { return intFlag("segmentSize", int(c)) }
@@ -244,22 +248,22 @@ type createAtomic bool
 func (c createAtomic) createFlag() []string { return boolFlag("atomic", bool(c)) }
 
 // CreateCopyuid perform the copy as the given user. Requires root privilege.
-// If user can't read or create files with the needed owners, CreateAnyowners or  CreateSkipunreadable must be used to prevent the operation from failing.
+// If user can't read or create files with the needed owners, CreateAnyowners or CreateSkipunreadable must be used to prevent the operation from failing.
 type CreateCopyuid string
 
 func (c CreateCopyuid) createFlag() []string { return stringFlag("copyuid", string(c)) }
 
 const (
-	// CreateAutostretch do suppress automatically making backwards-compatible stretchable volumes when the volume size crosses the auto-stretch-size threshold (default: 256 MB).  See also asr(8).
+	// CreateAutostretch do suppress automatically making backwards-compatible stretchable volumes when the volume size crosses the auto-stretch-size threshold (default: 256 MB). See also asr(8).
 	CreateAutostretch createAutostretch = true
 
-	// CreateNoAutostretch do not suppress automatically making backwards-compatible stretchable volumes when the volume size crosses the auto-stretch-size threshold (default: 256 MB).  See also asr(8).
+	// CreateNoAutostretch do not suppress automatically making backwards-compatible stretchable volumes when the volume size crosses the auto-stretch-size threshold (default: 256 MB). See also asr(8).
 	CreateNoAutostretch createAutostretch = false
 
 	// CreateOV overwrite an existing file. The default is not to overwrite existing files.
 	CreateOV createOV = true
 
-	// CreateAttach the image after creating it. If no filesystem is specified via -fs, the attach will fail per the default attach -mount required behavior.
+	// CreateAttach the image after creating it. If no filesystem is specified via createFS, the attach will fail per the default attach createMount required behavior.
 	CreateAttach createAttach = true
 
 	// CreateCrossdev do cross device boundaries on the source filesystem.
@@ -283,10 +287,10 @@ const (
 	// CreeteSkipunreadable skip files that can't be read by the copying user and don't authenticate.
 	CreeteSkipunreadable createSkipunreadable = false
 
-	// CreateAtomic do copy files to a temporary location and then rename them to their destination.  Atomic copies are the default.  Non-atomic copying may be slightly faster.
+	// CreateAtomic do copy files to a temporary location and then rename them to their destination. Atomic copies are the default. Non-atomic copying may be slightly faster.
 	CreateAtomic createAtomic = true
 
-	// CreateNoAtomic do not copy files to a temporary location and then rename them to their destination.  Atomic copies are the default.  Non-atomic copying may be slightly faster.
+	// CreateNoAtomic do not copy files to a temporary location and then rename them to their destination. Atomic copies are the default. Non-atomic copying may be slightly faster.
 	CreateNoAtomic createAtomic = false
 )
 
