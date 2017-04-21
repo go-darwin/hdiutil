@@ -48,18 +48,21 @@ func (e EncryptionType) String() string {
 	return fmt.Sprintf("EncryptionType(%d)", e)
 }
 
-func (e EncryptionType) attachFlag() []string { return stringFlag("encryption", e.String()) }
-func (e EncryptionType) verifyFlag() []string { return stringFlag("encryption", e.String()) }
+func (e EncryptionType) attachFlag() []string  { return stringFlag("encryption", e.String()) }
+func (e EncryptionType) verifyFlag() []string  { return stringFlag("encryption", e.String()) }
+func (e EncryptionType) convertFlag() []string { return stringFlag("encryption", e.String()) }
 
 type plist bool
 
-func (p plist) attachFlag() []string { return boolFlag("plist", bool(p)) }
-func (p plist) verifyFlag() []string { return boolFlag("plist", bool(p)) }
+func (p plist) attachFlag() []string  { return boolFlag("plist", bool(p)) }
+func (p plist) verifyFlag() []string  { return boolFlag("plist", bool(p)) }
+func (p plist) convertFlag() []string { return boolFlag("plist", bool(p)) }
 
 type puppetstrings bool
 
-func (p puppetstrings) attachFlag() []string { return boolFlag("puppetstrings", bool(p)) }
-func (p puppetstrings) verifyFlag() []string { return boolFlag("puppetstrings", bool(p)) }
+func (p puppetstrings) attachFlag() []string  { return boolFlag("puppetstrings", bool(p)) }
+func (p puppetstrings) verifyFlag() []string  { return boolFlag("puppetstrings", bool(p)) }
+func (p puppetstrings) convertFlag() []string { return boolFlag("puppetstrings", bool(p)) }
 
 // Srcimagekey specify a key/value pair for the disk image recognition system. (-imagekey is normally a synonym)
 type Srcimagekey map[string]string
@@ -71,8 +74,9 @@ func (s Srcimagekey) commonFlag() []string {
 	}
 	return stringFlag("srcimagekey", arg)
 }
-func (s Srcimagekey) attachFlag() []string { return s.commonFlag() }
-func (s Srcimagekey) createFlag() []string { return s.commonFlag() }
+func (s Srcimagekey) attachFlag() []string  { return s.commonFlag() }
+func (s Srcimagekey) createFlag() []string  { return s.commonFlag() }
+func (s Srcimagekey) convertFlag() []string { return s.commonFlag() }
 
 // Tgtimagekey specify a key/value pair for any image created. (-imagekey is only a synonym if there is no input image).
 type Tgtimagekey map[string]string
@@ -84,8 +88,9 @@ func (t Tgtimagekey) commonFlag() []string {
 	}
 	return stringFlag("tgtimagekey", arg)
 }
-func (t Tgtimagekey) attachFlag() []string { return t.commonFlag() }
-func (t Tgtimagekey) createFlag() []string { return t.commonFlag() }
+func (t Tgtimagekey) attachFlag() []string  { return t.commonFlag() }
+func (t Tgtimagekey) createFlag() []string  { return t.commonFlag() }
+func (t Tgtimagekey) convertFlag() []string { return t.commonFlag() }
 
 // Imagekey is normally a synonym to Srcimagekey, only a synonym Tgtimagekey if there is no input image.
 type Imagekey map[string]string
@@ -107,8 +112,9 @@ type Encryption EncryptionType
 
 type stdinpass bool
 
-func (s stdinpass) attachFlag() []string { return boolFlag("stdinpass", bool(s)) }
-func (s stdinpass) verifyFlag() []string { return boolFlag("stdinpass", bool(s)) }
+func (s stdinpass) attachFlag() []string  { return boolFlag("stdinpass", bool(s)) }
+func (s stdinpass) verifyFlag() []string  { return boolFlag("stdinpass", bool(s)) }
+func (s stdinpass) convertFlag() []string { return boolFlag("stdinpass", bool(s)) }
 
 type agentpass bool
 
@@ -120,6 +126,8 @@ func (r Recover) attachFlag() []string { return stringFlag("recover", string(r))
 // Certificate specify a secondary access certificate for an encrypted image.
 // cert_file must be DER-encoded certificate data, which can be created by Keychain Access or openssl(1).
 type Certificate string
+
+func (c Certificate) convertFlag() []string { return stringFlag("certificate", string(c)) }
 
 // Pubkey specify a list of public keys, identified by their hexadecimal hashes, to be used to protect the encrypted image being created.
 type Pubkey []string
@@ -143,25 +151,29 @@ type insecurehttp bool
 // hdiutil verbs taking images as input accept -shadow, -cacert, and -insecurehttp.
 type Shadow string
 
-func (s Shadow) attachFlag() []string { return stringFlag("shadow", string(s)) }
+func (s Shadow) attachFlag() []string  { return stringFlag("shadow", string(s)) }
+func (s Shadow) convertFlag() []string { return stringFlag("shadow", string(s)) }
 
 type verbose bool
 
-func (v verbose) attachFlag() []string { return boolFlag("verbose", bool(v)) }
-func (v verbose) detachFlag() []string { return boolFlag("verbose", bool(v)) }
-func (v verbose) createFlag() []string { return boolFlag("verbose", bool(v)) }
+func (v verbose) attachFlag() []string  { return boolFlag("verbose", bool(v)) }
+func (v verbose) detachFlag() []string  { return boolFlag("verbose", bool(v)) }
+func (v verbose) createFlag() []string  { return boolFlag("verbose", bool(v)) }
+func (v verbose) convertFlag() []string { return boolFlag("verbose", bool(v)) }
 
 type quiet bool
 
-func (q quiet) attachFlag() []string { return boolFlag("quiet", bool(q)) }
-func (q quiet) detachFlag() []string { return boolFlag("quiet", bool(q)) }
-func (q quiet) createFlag() []string { return boolFlag("quiet", bool(q)) }
+func (q quiet) attachFlag() []string  { return boolFlag("quiet", bool(q)) }
+func (q quiet) detachFlag() []string  { return boolFlag("quiet", bool(q)) }
+func (q quiet) createFlag() []string  { return boolFlag("quiet", bool(q)) }
+func (q quiet) convertFlag() []string { return boolFlag("quiet", bool(q)) }
 
 type debug bool
 
-func (d debug) attachFlag() []string { return boolFlag("debug", bool(d)) }
-func (d debug) detachFlag() []string { return boolFlag("debug", bool(d)) }
-func (d debug) createFlag() []string { return boolFlag("debug", bool(d)) }
+func (d debug) attachFlag() []string  { return boolFlag("debug", bool(d)) }
+func (d debug) detachFlag() []string  { return boolFlag("debug", bool(d)) }
+func (d debug) createFlag() []string  { return boolFlag("debug", bool(d)) }
+func (d debug) convertFlag() []string { return boolFlag("debug", bool(d)) }
 
 const (
 	// Plist provide result output in plist format.
