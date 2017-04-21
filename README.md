@@ -9,6 +9,37 @@ A package hdiutil implements a macOS hdiutil command wrapper.
 
 [![Analytics][ga-badge]][ga]
 
+## Support commands
+
+- [x] **attach**
+- [ ] burn
+- [ ] checksum
+- [ ] chpass
+- [ ] compact
+- [x] **convert**
+- [x] **create**
+- [x] **detach**
+- [ ] eject
+- [ ] erasekeys
+- [ ] flatten
+- [ ] imageinfo
+- [ ] info
+- [ ] internet-enable
+- [ ] isencrypted
+- [ ] makehybrid
+- [ ] mount
+- [ ] mountvol
+- [ ] plugins
+- [ ] pmap
+- [ ] resize
+- [ ] segment
+- [ ] udifderez
+- [ ] udifrez
+- [ ] unflatten
+- [ ] unmount
+- [x] **verify**
+
+
 [circleci]: https://circleci.com/gh/go-darwin/hdiutil
 [godoc]: https://godoc.org/github.com/go-darwin/hdiutil
 [codecov]: https://codecov.io/gh/go-darwin/hdiutil
