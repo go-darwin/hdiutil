@@ -86,8 +86,8 @@ const (
 )
 
 // Convert convert image to type format and write the result to outfile.
-func Convert(img string, format formatFlag, outfile string, flags ...convertFlag) error {
-	cmd := exec.Command(hdiutilPath, "convert", img)
+func Convert(image string, format formatFlag, outfile string, flags ...convertFlag) error {
+	cmd := exec.Command(hdiutilPath, "convert", image)
 	cmd.Args = append(cmd.Args, format.formatFlag()...)
 	cmd.Args = append(cmd.Args, outfile)
 	if len(flags) > 0 {

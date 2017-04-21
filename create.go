@@ -295,10 +295,10 @@ const (
 )
 
 // Create create a new image of the given size or from the provided data.
-func Create(img string, sizeSpec sizeFlag, flags ...createFlag) error {
+func Create(image string, sizeSpec sizeFlag, flags ...createFlag) error {
 	cmd := exec.Command(hdiutilPath, "create")
 	cmd.Args = append(cmd.Args, sizeSpec.sizeFlag()...)
-	cmd.Args = append(cmd.Args, img)
+	cmd.Args = append(cmd.Args, image)
 	if len(flags) > 0 {
 		for _, flag := range flags {
 			cmd.Args = append(cmd.Args, flag.createFlag()...)

@@ -12,17 +12,17 @@ import (
 )
 
 func main() {
-	img := "test.sparsebundle"
+	image := "test.sparsebundle"
 
 	if err := hdiutil.Create("test", hdiutil.CreateMegabytes(20), hdiutil.CreateHFSPlus, hdiutil.CreateSPARSEBUNDLE); err != nil {
 		log.Fatal(err)
 	}
-	if _, err := os.Stat(img); err != nil {
+	if _, err := os.Stat(image); err != nil {
 		log.Fatal(err)
 	}
-	defer os.RemoveAll(img)
+	defer os.RemoveAll(image)
 
-	deviceNode, err := hdiutil.Attach(img, hdiutil.AttachMountPoint("./test"), hdiutil.AttachNoVerify, hdiutil.AttachNoAutoFsck)
+	deviceNode, err := hdiutil.Attach(image, hdiutil.AttachMountPoint("./test"), hdiutil.AttachNoVerify, hdiutil.AttachNoAutoFsck)
 	if err != nil {
 		log.Fatal(err)
 	}
