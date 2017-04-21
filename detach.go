@@ -23,7 +23,7 @@ const (
 // Detach detach a disk image and terminate any associated process.
 func Detach(deviceNode string, flags ...detachFlag) error {
 	cmd := exec.Command(hdiutilPath, "detach", deviceNode)
-	if len(flags) != 0 {
+	if len(flags) > 0 {
 		for _, flag := range flags {
 			cmd.Args = append(cmd.Args, flag.detachFlag()...)
 		}

@@ -26,7 +26,7 @@ const (
 // Verify compute the checksum of a "read-only" or "compressed" image and verify it against the value stored in the image.
 func Verify(img string, flags ...verifyFlag) error {
 	cmd := exec.Command(hdiutilPath, "verify", img)
-	if len(flags) != 0 {
+	if len(flags) > 0 {
 		for _, flag := range flags {
 			cmd.Args = append(cmd.Args, flag.verifyFlag()...)
 		}

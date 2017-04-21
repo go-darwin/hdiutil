@@ -299,7 +299,7 @@ func Create(img string, sizeSpec sizeFlag, flags ...createFlag) error {
 	cmd := exec.Command(hdiutilPath, "create")
 	cmd.Args = append(cmd.Args, sizeSpec.sizeFlag()...)
 	cmd.Args = append(cmd.Args, img)
-	if len(flags) != 0 {
+	if len(flags) > 0 {
 		for _, flag := range flags {
 			cmd.Args = append(cmd.Args, flag.createFlag()...)
 		}

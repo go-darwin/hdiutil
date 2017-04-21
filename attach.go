@@ -244,7 +244,7 @@ var attachRe = regexp.MustCompile(`/dev/disk[\d]+`)
 func Attach(image string, flags ...attachFlag) (string, error) {
 	cmd := exec.Command(hdiutilPath, "attach", image)
 
-	if len(flags) != 0 {
+	if len(flags) > 0 {
 		for _, f := range flags {
 			cmd.Args = append(cmd.Args, f.attachFlag()...)
 		}
