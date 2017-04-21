@@ -26,7 +26,7 @@ A package hdiutil implements a macOS hdiutil command wrapper.
 - [ ] info
 - [ ] internet-enable
 - [ ] isencrypted
-- [ ] makehybrid
+- [x] **makehybrid**
 - [ ] mount
 - [ ] mountvol
 - [ ] plugins
