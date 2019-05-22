@@ -41,7 +41,7 @@ A package hdiutil implements a macOS hdiutil command wrapper.
 
 
 [circleci]: https://circleci.com/gh/go-darwin/hdiutil
-[godoc]: https://godoc.org/github.com/go-darwin/hdiutil
+[godoc]: https://godoc.org/go-darwin.dev/hdiutil
 [codecov]: https://codecov.io/gh/go-darwin/hdiutil
 [ga]: https://github.com/zchee
 

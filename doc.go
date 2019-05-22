@@ -50,4 +50,4 @@
 //       On the other hand, hdiutil create -srcfolder creates a disk image
 //       container, puts a filesystem in it, and then copies the specified
 //       files to the new filesystem.
-package hdiutil
+package hdiutil // import "go-darwin.dev/hdiutil"

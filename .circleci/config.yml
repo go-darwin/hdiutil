@@ -8,7 +8,7 @@ jobs:
       PATH: /Users/distiller/go/bin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
       GOPATH: /Users/distiller/go
       HOMEBREW_NO_AUTO_UPDATE: "1"
-    working_directory: ~/go/src/github.com/go-darwin/hdiutil
+    working_directory: ~/go/src/go-darwin.dev/hdiutil
     shell: /bin/bash --login -eux -o pipefail
     steps:
       - checkout
